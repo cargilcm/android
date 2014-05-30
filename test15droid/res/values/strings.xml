@@ -1,0 +1,11 @@
+<resources>
+
+    <string name="app_name">test15droid</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="getMonths">Get Months</string>
+    <string name="getEmails">Get Month-Emails</string>
+    <string name="textview01">textview01</string>
+    <string name="textview1">textView1</string>
+    
+</resources>
