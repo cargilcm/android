@@ -76,7 +76,10 @@ public class FullscreenActivity extends Activity implements OnClickListener {
 					Runnable runner = new Runnable(){
 						public void run(){
 							c = new Computater();
-							computaterOutput = c.getArchiverMonths().get(0);	
+							String html = c.getArchiverMonths().get(0);
+							computaterOutput = 	c.getEmailsFromMonthHTMLSource(null);
+							
+							//computaterOutput = html;
 						}
 					};
 					Thread thread = new Thread(runner);

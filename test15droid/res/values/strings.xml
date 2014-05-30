@@ -7,5 +7,7 @@
     <string name="getEmails">Get Month-Emails</string>
     <string name="textview01">textview01</string>
     <string name="textview1">textView1</string>
+    <string name="execute">Execute</string>
+    <string name="_optional_enter_url">(Optional)Enter URL</string>
     
 </resources>

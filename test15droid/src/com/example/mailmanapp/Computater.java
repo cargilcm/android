@@ -12,8 +12,12 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Scanner;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import android.util.Log;
 
@@ -34,7 +38,8 @@ public class Computater {
 	};
 
 	private ArrayList<String> answer;
-
+	private String htmlSource;
+	private File currentFile = null;
 	/**
 	 * get a url-specified list and return a list of all the URL's for the
 	 * Monthly files associated with it.
@@ -48,9 +53,9 @@ public class Computater {
 	}
 
 	public ArrayList<String> getArchiverMonths() {
-		String url2 = "http://charlestonwebapps.com/pipermail/webapps_charlestonwebapps.com/";
-		String url= "http://lists.csclug.org/pipermail/csclug";
-		String htmlSource = stringifyHTMLSource(url);
+		String url = "http://charlestonwebapps.com/pipermail/webapps_charlestonwebapps.com/";
+		String url2= "http://lists.csclug.org/pipermail/csclug";
+		htmlSource = stringifyHTMLSource(url);
 		ArrayList<String> result2 = new ArrayList<String>();	
 		/*
 		int startYear = 1988;
@@ -122,47 +127,60 @@ public class Computater {
 	}
 
 	public String getMonths() {
-
-		/*
 		String result="";
 		File directory = new File("archives/");
 		//directory.mkdir();
 		String currentFileContents = "";
 		String archiveMonthEmailsURL = "";
 		FileWriter writer = null;
-		String s = "2014-January";
-		File currentFile = null;//new File(directory+"/"+s);//null;
+		String s = "monthEmailActivityOccur.txt";//"2014-January";
 		//archiveMonthEmailsURL = "http://lists.csclug.org/pipermail/csclug/" + s + "/thread.html";
 		//currentFileContents = stringifyHTMLSource(archiveMonthEmailsURL);
 		//Log.v("getArhiver",currentFileContents);
 		//return currentFileContents;}
 		for(String s2:new String[2]){//getArchiverMonths()){
 			archiveMonthEmailsURL = "http://lists.csclug.org/pipermail/csclug/" + s + "/thread.html";
-			currentFileContents = stringifyHTMLSource(archiveMonthEmailsURL);
+			currentFileContents = htmlSource;//stringifyHTMLSource(archiveMonthEmailsURL);
 			try {
-			//	directory.mkdir();
+//				directory.mkdir();
 				currentFile = new File(directory+s);
 				currentFile.createNewFile();
 				writer = new FileWriter(currentFile);
 				writer.write(currentFileContents);
 				writer.flush();
 				writer.close();
-				result += getEmailsFromMonthHTMLSource(currentFile);
+//				result += getEmailsFromMonthHTMLSource(currentFile);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
 		return result;//months;*/
-		return "hello getMonths!";
 	}
 	
-	public String getEmailsFromMonthHTMLSource(File htmlSource){
-		
+	public String getEmailsFromMonthHTMLSource(File htmlSources) {
+		if(htmlSources!=null && htmlSources.exists())
+			htmlSources = currentFile;
+		else{
+			Log.println(Log.ASSERT, "getEmailsFromMonthHTMLSource","using String HTML");
+			htmlSources = new File("/mnt/sdcard/temp.txt");
+			FileWriter writer;
+			try {
+				htmlSources.createNewFile();
+				writer = new FileWriter(htmlSources);
+			 	writer.write(htmlSource);
+				writer.flush();
+			}
+			catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 		String out="";
-		/*try{
-			Document doc = Jsoup.parse(htmlSource, "UTF-8");
+		
+		try{
+			Document doc = Jsoup.parse(htmlSource);
+			//Document doc = Jsoup.parse(htmlSources, "UTF-8");
 			Elements links = doc.select("a[href]"); // a with href
-			links.remove(0);
+			/*links.remove(0);
 			links.remove(0);
 			links.remove(0);
 			links.remove(0);
@@ -170,14 +188,17 @@ public class Computater {
 			links.remove(links.size()-1);
 			links.remove(links.size()-1);
 			links.remove(links.size()-1);
+			
+			*/
+			int i=1;
 			for(Element e:links){
-				out+=e.toString()+"-"+e.attr("href")+"<BR>";
+				out+=i++ +")"+"-"+e.attr("href")+"\n\n"; //+e.toString()
 			}
 		}
 			
 		catch(Exception e){
 			System.out.println(e);
-		}*/
+		}
 		return out;
 	}
 	/*
